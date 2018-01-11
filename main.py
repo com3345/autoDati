@@ -10,6 +10,7 @@ from multiprocessing import Pool
 N_PAGES = 10
 URL_SEARCH = "https://{domain}/search?q={query}&btnG=Search&gbv=1"
 DOMAIN = "www.google.com"
+MAGIC_POINT = (332, 167)    # to find chongding or xigua
 AXIS = {
     'chongding': {
         'q': (80, 348, 1000, 600),
@@ -37,6 +38,9 @@ def pull_screenshot():
 
 def read_text(website='chongding'):
     img = Image.open("test.png")
+    magic_point_color = img.getpixel(MAGIC_POINT)
+    if any(c != 255 for c in magic_point_color):
+        website = "xigua"
 
     area_qu = AXIS[website]["q"]
     qu_img = img.crop(area_qu)
@@ -62,7 +66,7 @@ def extract_text(img, is_sel=True):
     if is_sel:
         string = string.replace(" ", "").split("/")[0]
     else:
-        string = string.replace("\n", "").replace("_", "一")[2:]
+        string = string.replace("\n", "").replace("-", "").replace("_", "一")[2:]
     return string
 
 
@@ -99,9 +103,9 @@ if __name__ == '__main__':
     t1 = time.time()
     pull_screenshot()
     t2 = time.time()
-    cls()
-    question, selections = read_text("chongding")
 
+    question, selections = read_text()
+    cls()
     print(question)
 
     t3 = time.time()
