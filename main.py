@@ -88,8 +88,11 @@ def find_answear(q, sel, domain=DOMAIN, n_check_pages=N_PAGES):
             recall_s2 += 1
         if s3 in content:
             recall_s3 += 1
-    print("{}: {}\t{}: {}\t{}: {}".format(
-        s1, recall_s1 / n_check_pages, s2, recall_s2 / n_check_pages, s3, recall_s3 / n_check_pages))
+    print("\t{}: {}%\n\t{}: {}%\n\t{}: {}%".format(
+        s1, int(recall_s1 / n_check_pages * 100),
+        s2, int(recall_s2 / n_check_pages * 100),
+        s3, int(recall_s3 / n_check_pages * 100))
+    )
 
 if __name__ == '__main__':
 
@@ -100,7 +103,6 @@ if __name__ == '__main__':
     question, selections = read_text("chongding")
 
     print(question)
-    # print(selections)
 
     t3 = time.time()
 
