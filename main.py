@@ -26,6 +26,10 @@ AXIS = {
 }
 
 
+def cls():
+    print("\n" * 100)
+
+
 def pull_screenshot():
     os.system("adb shell screencap -p /sdcard/autoDati/test.png")
     os.system("adb pull /sdcard/autoDati/test.png")
@@ -36,7 +40,7 @@ def read_text(website='chongding'):
 
     area_qu = AXIS[website]["q"]
     qu_img = img.crop(area_qu)
-    qu_img.show()
+
     ans_img = map(img.crop, (AXIS[website]["a1"], AXIS[website]["a2"], AXIS[website]["a3"]))
 
     pytesseract.pytesseract.tesseract_cmd = "/usr/local/bin/tesseract"
@@ -84,20 +88,23 @@ def find_answear(q, sel, domain=DOMAIN, n_check_pages=N_PAGES):
             recall_s2 += 1
         if s3 in content:
             recall_s3 += 1
-    print(recall_s1 / n_check_pages, recall_s2 / n_check_pages, recall_s3 / n_check_pages)
+    print("{}: {}\t{}: {}\t{}: {}".format(
+        s1, recall_s1 / n_check_pages, s2, recall_s2 / n_check_pages, s3, recall_s3 / n_check_pages))
 
-t1 = time.time()
-pull_screenshot()
-t2 = time.time()
+if __name__ == '__main__':
 
-question, selections = read_text("chongding")
+    t1 = time.time()
+    pull_screenshot()
+    t2 = time.time()
+    cls()
+    question, selections = read_text("chongding")
 
-print(question)
-print(selections)
+    print(question)
+    # print(selections)
 
-t3 = time.time()
+    t3 = time.time()
 
-find_answear(question, selections)
-t4 = time.time()
+    find_answear(question, selections)
+    t4 = time.time()
 
-print(t2 - t1, t3 - t2, t4 - t3)
+    # print(t2 - t1, t3 - t2, t4 - t3)
